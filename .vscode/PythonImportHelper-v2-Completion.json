@@ -1,5 +1,14 @@
 [
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "streamlit",
         "kind": 6,
         "isExtraImport": true,
@@ -26,12 +35,20 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
+        "label": "label_mapping",
+        "importPath": "src.utils.label_mapping",
+        "description": "src.utils.label_mapping",
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "detail": "src.utils.label_mapping",
+        "documentation": {}
+    },
+    {
+        "label": "label_mapping",
+        "kind": 5,
+        "importPath": "src.utils.label_mapping",
+        "description": "src.utils.label_mapping",
+        "peekOfCode": "label_mapping = {\n    0: 'activate_my_card',\n    1: 'age_limit',\n    2: 'apple_pay_or_google_pay',\n    3: 'atm_support',\n    4: 'automatic_top_up',\n    5: 'balance_not_updated_after_bank_transfer',\n    6: 'balance_not_updated_after_cheque_or_cash_deposit',\n    7: 'beneficiary_not_allowed',\n    8: 'cancel_transfer',",
+        "detail": "src.utils.label_mapping",
         "documentation": {}
     },
     {
@@ -39,7 +56,16 @@
         "kind": 2,
         "importPath": "src.app",
         "description": "src.app",
-        "peekOfCode": "def classify_intent(user_text):\n    try:\n        data = {'text': user_text}\n        response = requests.post(API_URL, json=data)\n        if response.status_code == 200:\n            classification = response.text\n            return classification\n        else:\n            return f'API error: {response.status_code}'\n    except Exception as e:",
+        "peekOfCode": "def classify_intent(user_text):\n    try:\n        response = requests.post(f'{API_URL}/inference', json=user_text)\n        if response.status_code == 200:\n            return response.json()\n        else:\n            return {'error': f'API error: {response.status_code}'}\n    except Exception as e:\n        return {'error': str(e)}\ndef submit_feedback(query_id, is_correct, corrected_intent=None):",
+        "detail": "src.app",
+        "documentation": {}
+    },
+    {
+        "label": "submit_feedback",
+        "kind": 2,
+        "importPath": "src.app",
+        "description": "src.app",
+        "peekOfCode": "def submit_feedback(query_id, is_correct, corrected_intent=None):\n    \"\"\"\n    Submit user feedback to the API.\n    Args:\n        query_id (int): The ID of the query for which feedback is being \n                        submitted.\n        is_correct (bool): Whether the prediction was correct.\n        corrected_intent (Optional[str]): The corrected intent if the \n                                          prediction was incorrect.\n    Returns:",
         "detail": "src.app",
         "documentation": {}
     },
@@ -48,7 +74,7 @@
         "kind": 5,
         "importPath": "src.app",
         "description": "src.app",
-        "peekOfCode": "API_URL = os.getenv('API_URL')\n@st.cache_data()\ndef classify_intent(user_text):\n    try:\n        data = {'text': user_text}\n        response = requests.post(API_URL, json=data)\n        if response.status_code == 200:\n            classification = response.text\n            return classification\n        else:",
+        "peekOfCode": "API_URL = os.getenv('API_URL')\nif 'classification_done' not in st.session_state:\n    st.session_state.classification_done = False\n@st.cache_data()\ndef classify_intent(user_text):\n    try:\n        response = requests.post(f'{API_URL}/inference', json=user_text)\n        if response.status_code == 200:\n            return response.json()\n        else:",
         "detail": "src.app",
         "documentation": {}
     }
