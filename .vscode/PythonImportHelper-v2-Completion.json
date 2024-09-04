@@ -9,6 +9,39 @@
         "documentation": {}
     },
     {
+        "label": "classify_intent",
+        "importPath": "src.utils.api_requests",
+        "description": "src.utils.api_requests",
+        "isExtraImport": true,
+        "detail": "src.utils.api_requests",
+        "documentation": {}
+    },
+    {
+        "label": "submit_feedback",
+        "importPath": "src.utils.api_requests",
+        "description": "src.utils.api_requests",
+        "isExtraImport": true,
+        "detail": "src.utils.api_requests",
+        "documentation": {}
+    },
+    {
+        "label": "label_mapping",
+        "importPath": "src.utils.label_mapping",
+        "description": "src.utils.label_mapping",
+        "isExtraImport": true,
+        "detail": "src.utils.label_mapping",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "requests",
         "kind": 6,
         "isExtraImport": true,
@@ -26,30 +59,92 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
+        "label": "render_ui",
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "detail": "src.frontend.ui",
+        "documentation": {}
+    },
+    {
+        "label": "render_header",
+        "kind": 2,
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
+        "peekOfCode": "def render_header():\n    \"\"\"Render the header of the Streamlit app.\"\"\"\n    st.header('Banking Intent Classifier', divider='rainbow')\ndef render_text_input():\n    \"\"\"Render the text input and classify button.\"\"\"\n    text_input = st.text_input(\"Enter some text 👇\")\n    submit_btn = st.button('Classify Intent', type='secondary')\n    return text_input, submit_btn\ndef render_prediction_result():\n    \"\"\"Render the prediction result and confidence score.\"\"\"",
+        "detail": "src.frontend.ui",
+        "documentation": {}
+    },
+    {
+        "label": "render_text_input",
+        "kind": 2,
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
+        "peekOfCode": "def render_text_input():\n    \"\"\"Render the text input and classify button.\"\"\"\n    text_input = st.text_input(\"Enter some text 👇\")\n    submit_btn = st.button('Classify Intent', type='secondary')\n    return text_input, submit_btn\ndef render_prediction_result():\n    \"\"\"Render the prediction result and confidence score.\"\"\"\n    st.subheader('Prediction Result')\n    st.write(f\"**Predicted Intent:** {st.session_state.predicted_intent}\")\n    st.write(f\"**Confidence Score:** {st.session_state.confidence_score:.2f}\")",
+        "detail": "src.frontend.ui",
+        "documentation": {}
+    },
+    {
+        "label": "render_prediction_result",
+        "kind": 2,
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
+        "peekOfCode": "def render_prediction_result():\n    \"\"\"Render the prediction result and confidence score.\"\"\"\n    st.subheader('Prediction Result')\n    st.write(f\"**Predicted Intent:** {st.session_state.predicted_intent}\")\n    st.write(f\"**Confidence Score:** {st.session_state.confidence_score:.2f}\")\ndef render_feedback_section():\n    \"\"\"Render the feedback section and handle feedback submission.\"\"\"\n    st.subheader('Was this prediction correct?')\n    feedback_option = st.radio(\"Please select an option:\", ('Yes', 'No'),\n                               label_visibility=\"visible\")",
+        "detail": "src.frontend.ui",
+        "documentation": {}
+    },
+    {
+        "label": "render_feedback_section",
+        "kind": 2,
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
+        "peekOfCode": "def render_feedback_section():\n    \"\"\"Render the feedback section and handle feedback submission.\"\"\"\n    st.subheader('Was this prediction correct?')\n    feedback_option = st.radio(\"Please select an option:\", ('Yes', 'No'),\n                               label_visibility=\"visible\")\n    if feedback_option == 'No':\n        st.subheader('Please select the correct intent:')\n        corrected_intent = st.selectbox('Correct Intent:',\n                                        list(label_mapping.values()),\n                                        label_visibility=\"visible\")",
+        "detail": "src.frontend.ui",
+        "documentation": {}
+    },
+    {
+        "label": "render_ui",
+        "kind": 2,
+        "importPath": "src.frontend.ui",
+        "description": "src.frontend.ui",
+        "peekOfCode": "def render_ui():\n    \"\"\"Main UI function that combines all components.\"\"\"\n    render_header()\n    text_input, submit_btn = render_text_input()\n    if submit_btn:\n        result = classify_intent(text_input)\n        if 'error' in result:\n            st.error(result['error'])\n        else:\n            st.session_state.classification_done = True",
+        "detail": "src.frontend.ui",
         "documentation": {}
     },
     {
         "label": "classify_intent",
         "kind": 2,
-        "importPath": "src.app",
-        "description": "src.app",
-        "peekOfCode": "def classify_intent(user_text):\n    try:\n        data = {'text': user_text}\n        response = requests.post(API_URL, json=data)\n        if response.status_code == 200:\n            classification = response.text\n            return classification\n        else:\n            return f'API error: {response.status_code}'\n    except Exception as e:",
-        "detail": "src.app",
+        "importPath": "src.utils.api_requests",
+        "description": "src.utils.api_requests",
+        "peekOfCode": "def classify_intent(user_text):\n    \"\"\"\n    Sends a text input to the API to classify the intent.\n    Args:\n        user_text (str): The input text from the user.\n    Returns:\n        dict: The API response containing the predicted intent or an error.\n    \"\"\"\n    try:\n        response = requests.post(f'{API_URL}/inference', json=user_text)",
+        "detail": "src.utils.api_requests",
+        "documentation": {}
+    },
+    {
+        "label": "submit_feedback",
+        "kind": 2,
+        "importPath": "src.utils.api_requests",
+        "description": "src.utils.api_requests",
+        "peekOfCode": "def submit_feedback(query_id, is_correct, corrected_intent=None):\n    \"\"\"\n    Submits feedback to the API.\n    Args:\n        query_id (int): ID of the query to which the feedback relates.\n        is_correct (bool): Whether the predicted intent was correct.\n        corrected_intent (str, optional): The corrected intent, if applicable.\n    Returns:\n        tuple: (status, message) indicating success or failure.\n    \"\"\"",
+        "detail": "src.utils.api_requests",
         "documentation": {}
     },
     {
         "label": "API_URL",
         "kind": 5,
-        "importPath": "src.app",
-        "description": "src.app",
-        "peekOfCode": "API_URL = os.getenv('API_URL')\n@st.cache_data()\ndef classify_intent(user_text):\n    try:\n        data = {'text': user_text}\n        response = requests.post(API_URL, json=data)\n        if response.status_code == 200:\n            classification = response.text\n            return classification\n        else:",
-        "detail": "src.app",
+        "importPath": "src.utils.api_requests",
+        "description": "src.utils.api_requests",
+        "peekOfCode": "API_URL = os.getenv('API_URL')\ndef classify_intent(user_text):\n    \"\"\"\n    Sends a text input to the API to classify the intent.\n    Args:\n        user_text (str): The input text from the user.\n    Returns:\n        dict: The API response containing the predicted intent or an error.\n    \"\"\"\n    try:",
+        "detail": "src.utils.api_requests",
+        "documentation": {}
+    },
+    {
+        "label": "label_mapping",
+        "kind": 5,
+        "importPath": "src.utils.label_mapping",
+        "description": "src.utils.label_mapping",
+        "peekOfCode": "label_mapping = {\n    0: 'activate_my_card',\n    1: 'age_limit',\n    2: 'apple_pay_or_google_pay',\n    3: 'atm_support',\n    4: 'automatic_top_up',\n    5: 'balance_not_updated_after_bank_transfer',\n    6: 'balance_not_updated_after_cheque_or_cash_deposit',\n    7: 'beneficiary_not_allowed',\n    8: 'cancel_transfer',",
+        "detail": "src.utils.label_mapping",
         "documentation": {}
     }
 ]
